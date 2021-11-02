@@ -38,17 +38,28 @@ public static ArrayList<Pet> petList = new ArrayList<>();
                         addPet();
                         break;
                     case 3:
+                        // calling updatePet method
+                        updatePet();
+                        break;
+                    case 4:
+                        // calling removePet method
+                        removePet();
+                        break;
+                    case 5:
                         // calling searchName method
                         searchName();
                         break;
-                    case 4:
+                    case 6:
                         // calling searchAge method
                         searchAge();
                         break;
-                    case 5:
+                    case 7:
                         // switching the validator boolean from true to false. This breaks the while loop and closes to program
                         System.out.println("Goodbye!");
                         validator = false;
+                        break;
+                    default:
+                        System.out.println("Error: Please type a number between 1 and 7.");
                         break;
                 }
             }
@@ -62,9 +73,11 @@ public static ArrayList<Pet> petList = new ArrayList<>();
         System.out.println("\nWhat would you like to do?");
         System.out.println("1) View all pets");
         System.out.println("2) Add more pets");
-        System.out.println("3) Search pets by name");
-        System.out.println("4) Search pets by age");
-        System.out.println("5) Exit program");
+        System.out.println("3) Update an existing pet");
+        System.out.println("4) Remove an existing pet");
+        System.out.println("5) Search pets by name");
+        System.out.println("6) Search pets by age");
+        System.out.println("7) Exit program");
         System.out.print("Your choice: ");
     }
     // this method displays the data that is the the petList ArrayList to the user
@@ -125,7 +138,7 @@ public static ArrayList<Pet> petList = new ArrayList<>();
                 }
                 // if the array size is anything other than 2, the following error is printed
                 else{
-                    System.out.println("Error: Please enter a name and an age separated by a space.");
+                    System.out.println("Error: Please enter a one word name and an age separated by a space.");
                 }
             }
         }
@@ -196,6 +209,83 @@ public static ArrayList<Pet> petList = new ArrayList<>();
             else{
                 System.out.println("Error: Please type an integer as an age.");
             }
+        }
+    }
+    public static void updatePet(){
+        // calling petDisplay method to show all pets to the user
+        petDisplay();
+        while(true){
+            System.out.print("\nEnter the pet ID to update: ");
+            Scanner sc = new Scanner(System.in);
+            String strId = sc.nextLine();
+            // calling isInt method to make sure the id entered is a number
+            boolean idCheck = isInt(strId);
+            if (idCheck){
+                int id = Integer.parseInt(strId);
+                if (id < petList.size()){
+                    while(true){
+                        System.out.print("Enter new name and new age: ");
+                        String petData = sc.nextLine();
+                        String[] splitData = petData.split(" ");
+                        // validating user input
+                        if (splitData.length == 2){
+                            boolean ageCheck = isInt(splitData[1]);
+                            if (ageCheck){
+                                // calling isInt method to make sure the user entered a number
+                                int age = Integer.parseInt(splitData[1]);
+                                // printing the old name and age to the user
+                                System.out.println(petList.get(id).getName() + " " + petList.get(id).getAge() + " changed to " + splitData[0] + " " + age + ".");
+                                // setting the pet at the id entered to the name and age entered by the user
+                                petList.get(id).setName(splitData[0]);
+                                petList.get(id).setAge(age);
+                                // breaking inner loop
+                                break;
+                            }
+                            else{
+                                System.out.println("Error: The age entered is not an integer.");
+                            }
+                        }
+                        else{
+                            System.out.println("Error: Make sure you enter a one word name and an age separated by a space.");
+                        }
+                    }
+                    // breaking outer loop
+                    break;
+                }
+                else{
+                    System.out.println("Error: The ID entered is invalid.");
+                }
+            }
+            else{
+                System.out.println("Error: The ID entered is not an integer.");
+            }
+        }
+    }
+    public static void removePet(){
+        // calling petDisplay method to show all pets to the user
+        petDisplay();
+        while(true){
+           System.out.print("Enter the pet ID to remove: ");
+           Scanner sc = new Scanner(System.in);
+           String strId = sc.nextLine();
+           // calling isInt method for input validation
+           boolean idCheck = isInt(strId);
+           if (idCheck){
+               int id = Integer.parseInt(strId);
+               if (id < petList.size()){
+                   // printing to the user the pet that is being removed from the database
+                   System.out.println(petList.get(id).getName() + " " + petList.get(id).getAge() + " is removed.");
+                   // removing the pet from the database
+                   petList.remove(id);
+                   break;
+               }
+               else{
+                   System.out.println("Error: The ID entered is invalid.");
+               }
+           }
+           else{
+               System.out.println("Error: The ID entered is not an integer.");
+           }
         }
     }
     // isInt() is a method for checking if an input can be converted to an int. Returns true or false
